@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Akash Kumar Mishra — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════ TOKENS ═══════════ */
+:root{
+  --bg:#05050e;--sur:#0d0d1e;--sur2:#13132a;
+  --ind:#6366f1;--ind2:#818cf8;
+  --pink:#ec4899;--cyan:#22d3ee;--amb:#f59e0b;
+  --txt:#e2e8f0;--mut:#94a3b8;--faint:#1e1e3a;
+  --bdr:rgba(99,102,241,.17);
+  --gi:0 0 30px rgba(99,102,241,.38);
+  --gp:0 0 30px rgba(236,72,153,.38);
+  --gc:0 0 28px rgba(34,211,238,.3);
+  --ga:0 0 22px rgba(245,158,11,.28);
+  --fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif;
+  --r:15px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:var(--fb);background:var(--bg);color:var(--txt);overflow:hidden;cursor:none}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--ind),var(--pink));border-radius:9px}
+
+/* ═══════════ NOISE ═══════════ */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9997;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.025}
+
+/* ═══════════ CURSOR ═══════════ */
+#cur{position:fixed;width:9px;height:9px;border-radius:50%;background:var(--cyan);pointer-events:none;z-index:99999;transform:translate(-50%,-50%);box-shadow:0 0 10px var(--cyan),0 0 22px var(--cyan);mix-blend-mode:screen;transition:background .2s,box-shadow .2s,transform .1s}
+#cur-ring{position:fixed;width:30px;height:30px;border:1.5px solid rgba(129,140,248,.7);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s}
+
+/* ═══════════ LOADER ═══════════ */
+#loader{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99990;transition:opacity .8s ease,visibility .8s ease}
+#loader.out{opacity:0;visibility:hidden;pointer-events:none}
+.ld-init{font-family:var(--fd);font-size:clamp(5rem,12vw,8rem);font-weight:800;letter-spacing:-.03em;background:linear-gradient(130deg,var(--ind),var(--pink),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:ldp 1.3s ease-in-out infinite alternate}
+@keyframes ldp{from{filter:drop-shadow(0 0 8px rgba(99,102,241,.5))}to{filter:drop-shadow(0 0 28px rgba(236,72,153,.8))}}
+.ld-bar-wrap{width:180px;height:2.5px;background:rgba(255,255,255,.07);border-radius:9px;margin-top:2.5rem;overflow:hidden}
+.ld-bar{height:100%;width:0;background:linear-gradient(90deg,var(--ind),var(--pink),var(--cyan));animation:ldf 1.9s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes ldf{to{width:100%}}
+.ld-txt{font-size:.7rem;color:var(--mut);letter-spacing:.22em;text-transform:uppercase;margin-top:1rem}
+
+/* ═══════════ CANVAS ═══════════ */
+#cv{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ═══════════ LAYOUT ═══════════ */
+#shell{position:fixed;inset:0;display:flex;flex-direction:column;z-index:1}
+
+/* ═══════════ NAVBAR ═══════════ */
+#nav{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:.85rem 2.2rem;background:rgba(5,5,14,.6);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);border-bottom:1px solid var(--bdr);position:relative;z-index:100}
+.nav-logo{font-family:var(--fd);font-size:1.25rem;font-weight:800;background:linear-gradient(90deg,var(--ind2),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.02em;cursor:none}
+.nav-logo:hover{opacity:.8}
+.nav-links{display:flex;gap:.25rem}
+.nav-links button{
+  font-family:var(--fb);font-size:.84rem;font-weight:500;color:var(--mut);
+  background:none;border:none;cursor:none;
+  padding:.42rem .9rem;border-radius:8px;
+  position:relative;transition:color .2s,background .2s;letter-spacing:.02em;
+}
+.nav-links button::after{content:'';position:absolute;bottom:4px;left:.9rem;right:.9rem;height:1.5px;background:linear-gradient(90deg,var(--ind),var(--pink));border-radius:9px;transform:scaleX(0);transition:transform .28s cubic-bezier(.4,0,.2,1);transform-origin:left}
+.nav-links button:hover{color:var(--txt);background:rgba(99,102,241,.07)}
+.nav-links button.active{color:var(--txt);background:rgba(99,102,241,.1)}
+.nav-links button.active::after{transform:scaleX(1)}
+.nav-cta{font-family:var(--fd);font-size:.78rem;font-weight:700;padding:.45rem 1.1rem;border-radius:8px;background:linear-gradient(135deg,var(--ind),var(--pink));color:#fff;letter-spacing:.04em;transition:box-shadow .3s,transform .2s;cursor:none;border:none}
+.nav-cta:hover{box-shadow:var(--gi);transform:translateY(-1px)}
+.hbg{display:none;flex-direction:column;gap:5px;padding:4px;cursor:none;background:none;border:none}
+.hbg span{width:21px;height:2px;background:var(--txt);border-radius:2px;transition:.3s;display:block}
+.hbg.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hbg.open span:nth-child(2){opacity:0}
+.hbg.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* mob menu */
+#mob{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(10,10,25,.97);backdrop-filter:blur(22px);border-bottom:1px solid var(--bdr);flex-direction:column;z-index:99}
+#mob.open{display:flex}
+#mob button{font-size:.95rem;color:var(--mut);padding:.95rem 2rem;border:none;background:none;cursor:none;border-bottom:1px solid var(--bdr);text-align:left;transition:color .2s,background .2s}
+#mob button:hover,#mob button.active{color:var(--txt);background:rgba(99,102,241,.09)}
+
+/* ═══════════ PAGE CONTAINER ═══════════ */
+#pages{flex:1;position:relative;overflow:hidden}
+.page{
+  position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;
+  padding:2.5rem 2.5rem 3rem;
+  opacity:0;pointer-events:none;
+  transform:translateY(18px);
+  transition:opacity .4s ease,transform .4s cubic-bezier(.23,1,.32,1);
+}
+.page.active{opacity:1;pointer-events:all;transform:translateY(0)}
+.page.exit{opacity:0;transform:translateY(-18px)}
+
+/* page inner max-width */
+.page-inner{max-width:1060px;margin:0 auto}
+
+/* ═══════════ PAGE HEADER ═══════════ */
+.ph{margin-bottom:2.8rem}
+.ph-label{font-family:var(--fd);font-size:.68rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--ind2);margin-bottom:.7rem;display:flex;align-items:center;gap:.55rem}
+.ph-label::before{content:'';display:inline-block;width:24px;height:1.5px;background:linear-gradient(90deg,var(--ind),var(--pink));border-radius:9px}
+.ph-title{font-family:var(--fd);font-size:clamp(2rem,4.5vw,3rem);font-weight:800;line-height:1.07;letter-spacing:-.03em}
+.ph-title .g{background:linear-gradient(135deg,var(--ind2),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.ph-title .gp{background:linear-gradient(135deg,var(--pink),var(--amb));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.ph-title .gc{background:linear-gradient(135deg,var(--cyan),var(--ind2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.ph-sub{font-size:.95rem;color:var(--mut);margin-top:.7rem;line-height:1.7;max-width:580px}
+
+/* ═══════════ COMMON CARDS ═══════════ */
+.card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:1.5rem 1.7rem;transition:border-color .25s,box-shadow .25s,transform .25s}
+.card:hover{border-color:rgba(99,102,241,.35);box-shadow:var(--gi);transform:translateY(-3px)}
+.card.pink:hover{border-color:rgba(236,72,153,.32);box-shadow:var(--gp)}
+.card.cyan:hover{border-color:rgba(34,211,238,.28);box-shadow:var(--gc)}
+.card.amb:hover{border-color:rgba(245,158,11,.25);box-shadow:var(--ga)}
+
+/* grid helpers */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.gauto{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.2rem}
+.gauto2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.gauto3{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem}
+
+/* chip */
+.chip{font-size:.74rem;font-weight:500;padding:.24rem .72rem;border-radius:50px;border:1px solid var(--bdr);color:var(--mut);transition:border-color .18s,color .18s,transform .18s,box-shadow .18s;cursor:default;display:inline-block}
+.chip:hover{color:var(--txt);border-color:var(--ind2);box-shadow:0 0 10px rgba(99,102,241,.2);transform:translateY(-2px)}
+.chip.ci{border-color:rgba(99,102,241,.25);color:var(--ind2)}
+.chip.cp{border-color:rgba(236,72,153,.25);color:var(--pink)}
+.chip.cc{border-color:rgba(34,211,238,.22);color:var(--cyan)}
+.chip.ca{border-color:rgba(245,158,11,.22);color:var(--amb)}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem}
+
+/* divider label */
+.div-label{font-family:var(--fd);font-size:.69rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mut);margin:.5rem 0 1rem;display:flex;align-items:center;gap:.6rem}
+.div-label::after{content:'';flex:1;height:1px;background:var(--bdr)}
+
+/* ═══════════════════════════════════════
+   PAGE 0 — HOME (HERO)
+═══════════════════════════════════════ */
+#p-home{display:flex;align-items:center;justify-content:center;padding:0 2.5rem}
+.hero-wrap{display:flex;align-items:center;justify-content:space-between;gap:3rem;max-width:1060px;width:100%;margin:0 auto}
+.hero-left{flex:1;max-width:570px}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.3rem .9rem;border-radius:50px;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.22);font-size:.73rem;color:var(--ind2);font-weight:500;letter-spacing:.06em;margin-bottom:1.8rem}
+.hb-dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:blink 1.5s ease infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero-name{font-family:var(--fd);font-size:clamp(2.8rem,6.5vw,5rem);font-weight:800;line-height:.95;letter-spacing:-.035em;margin-bottom:.65rem;background:linear-gradient(140deg,#fff 20%,var(--ind2) 55%,var(--pink) 90%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% 200%;animation:shimmer 5s ease-in-out infinite}
+@keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.hero-sub{font-family:var(--fd);font-size:clamp(.9rem,2vw,1.15rem);font-weight:500;color:var(--mut);margin-bottom:1.4rem}
+.hero-sub .ac{color:var(--cyan);font-weight:600}
+.hero-desc{font-size:.95rem;line-height:1.8;color:var(--mut);max-width:500px;margin-bottom:2.4rem}
+.hero-ctas{display:flex;gap:.9rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.btn-p{font-family:var(--fd);font-size:.84rem;font-weight:700;padding:.68rem 1.7rem;border-radius:10px;background:linear-gradient(135deg,var(--ind),var(--pink));color:#fff;letter-spacing:.04em;display:inline-flex;align-items:center;gap:.45rem;transition:box-shadow .3s,transform .2s;border:none;cursor:none}
+.btn-p:hover{box-shadow:0 0 26px rgba(99,102,241,.5);transform:translateY(-2px)}
+.btn-s{font-family:var(--fd);font-size:.84rem;font-weight:600;padding:.66rem 1.7rem;border-radius:10px;border:1.5px solid rgba(99,102,241,.3);color:var(--ind2);letter-spacing:.04em;transition:background .2s,border-color .2s,transform .2s;background:none;cursor:none}
+.btn-s:hover{background:rgba(99,102,241,.1);border-color:var(--ind);transform:translateY(-2px)}
+.hero-stats{display:flex;gap:2rem;flex-wrap:wrap}
+.hs{text-align:center}
+.hs-val{font-family:var(--fd);font-size:1.6rem;font-weight:800;background:linear-gradient(135deg,var(--cyan),var(--ind2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hs-lbl{font-size:.72rem;color:var(--mut);margin-top:.1rem}
+
+/* floating card */
+.hcard-wrap{flex:0 0 auto;perspective:900px}
+.hcard{width:265px;background:linear-gradient(145deg,rgba(20,20,52,.94),rgba(13,13,30,.97));border:1px solid rgba(99,102,241,.22);border-radius:20px;padding:1.9rem 1.5rem;transform-style:preserve-3d;animation:float3d 7s ease-in-out infinite;position:relative;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.55),var(--gi)}
+.hcard::before{content:'';position:absolute;inset:0;background:linear-gradient(145deg,rgba(99,102,241,.07),rgba(236,72,153,.04));pointer-events:none}
+@keyframes float3d{0%{transform:rotateY(-9deg) rotateX(5deg) translateY(0)}50%{transform:rotateY(9deg) rotateX(-5deg) translateY(-16px)}100%{transform:rotateY(-9deg) rotateX(5deg) translateY(0)}}
+.hc-av{width:56px;height:56px;border-radius:13px;background:linear-gradient(135deg,var(--ind),var(--pink));display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:1.3rem;font-weight:800;color:#fff;margin-bottom:1rem;box-shadow:0 0 16px rgba(99,102,241,.4)}
+.hc-nm{font-family:var(--fd);font-size:.92rem;font-weight:700;color:#fff;margin-bottom:.15rem}
+.hc-rl{font-size:.72rem;color:var(--mut);margin-bottom:1.2rem}
+.hc-div{height:1px;background:var(--bdr);margin-bottom:1.2rem}
+.hc-stats{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.hcs-v{font-family:var(--fd);font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,var(--cyan),var(--ind2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hcs-l{font-size:.65rem;color:var(--mut);margin-top:.05rem}
+.hc-tag{display:inline-flex;align-items:center;gap:.38rem;margin-top:1.2rem;padding:.25rem .65rem;background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.17);border-radius:50px;font-size:.65rem;color:var(--cyan);font-weight:500}
+.hct-dot{width:5px;height:5px;border-radius:50%;background:var(--cyan);animation:blink 1.4s infinite}
+
+/* ═══════════════════════════════════════
+   PAGE 1 — ABOUT
+═══════════════════════════════════════ */
+.about-bio-grid{display:grid;grid-template-columns:3fr 2fr;gap:2.5rem;margin-bottom:2.5rem}
+.bio-text{font-size:.94rem;line-height:1.85;color:var(--mut)}
+.bio-text p+p{margin-top:1rem}
+.bio-text .hi{color:var(--txt);font-weight:500}
+.bio-text .acc{color:var(--cyan)}
+.bio-facts{display:flex;flex-direction:column;gap:.85rem}
+.bf-card{display:flex;align-items:flex-start;gap:.9rem;background:var(--sur);border:1px solid var(--bdr);border-radius:12px;padding:1rem 1.2rem;transition:border-color .22s,box-shadow .22s,transform .22s}
+.bf-card:hover{border-color:rgba(99,102,241,.32);box-shadow:var(--gi);transform:translateX(4px)}
+.bf-icon{font-size:1.3rem;flex-shrink:0;margin-top:.05rem}
+.bf-lbl{font-family:var(--fd);font-size:.69rem;font-weight:700;color:var(--ind2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.2rem}
+.bf-val{font-size:.84rem;color:var(--mut);line-height:1.5}
+
+.vals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem}
+.val-card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:1.4rem;text-align:center;position:relative;overflow:hidden;transition:border-color .25s,box-shadow .25s,transform .25s}
+.val-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2.5px;background:linear-gradient(90deg,var(--ind),var(--pink),var(--cyan));transform:scaleX(0);transition:transform .28s}
+.val-card:hover{transform:translateY(-4px);border-color:rgba(99,102,241,.3);box-shadow:var(--gi)}
+.val-card:hover::after{transform:scaleX(1)}
+.ve{font-size:1.9rem;margin-bottom:.7rem}
+.vn{font-family:var(--fd);font-size:.88rem;font-weight:700;color:#fff;margin-bottom:.35rem}
+.vd{font-size:.76rem;color:var(--mut);line-height:1.55}
+
+/* ═══════════════════════════════════════
+   PAGE 2 — SKILLS
+═══════════════════════════════════════ */
+.sk-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem 2.8rem;margin-bottom:2.5rem}
+.sk-item .sk-hdr{display:flex;justify-content:space-between;margin-bottom:.42rem}
+.sk-nm{font-size:.86rem;font-weight:500;color:var(--txt)}
+.sk-pct{font-family:var(--fd);font-size:.78rem;font-weight:700;color:var(--mut)}
+.sk-track{height:4px;border-radius:9px;background:rgba(255,255,255,.05);overflow:hidden}
+.sk-bar{height:100%;width:0;border-radius:9px;transition:width 1.3s cubic-bezier(.4,0,.2,1)}
+.ic{background:linear-gradient(90deg,var(--ind),var(--cyan));box-shadow:0 0 8px rgba(99,102,241,.3)}
+.ip{background:linear-gradient(90deg,var(--ind),var(--pink));box-shadow:0 0 8px rgba(99,102,241,.3)}
+.cp{background:linear-gradient(90deg,var(--cyan),var(--pink));box-shadow:0 0 8px rgba(34,211,238,.28)}
+.ap{background:linear-gradient(90deg,var(--amb),var(--pink));box-shadow:0 0 8px rgba(245,158,11,.28)}
+
+.sk-cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.1rem}
+.sk-cat{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:1.3rem 1.4rem;transition:border-color .22s,box-shadow .22s}
+.sk-cat:hover{border-color:rgba(99,102,241,.32);box-shadow:var(--gi)}
+.sk-cat-hd{font-family:var(--fd);font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.85rem}
+.sk-cat-hd.ic2{color:var(--ind2)}.sk-cat-hd.pk{color:var(--pink)}.sk-cat-hd.cy{color:var(--cyan)}.sk-cat-hd.am{color:var(--amb)}
+
+/* ═══════════════════════════════════════
+   PAGE 3 — EXPERIENCE (TIMELINE)
+═══════════════════════════════════════ */
+.tl{position:relative;padding-left:2.2rem}
+.tl::before{content:'';position:absolute;left:.5rem;top:.6rem;bottom:.6rem;width:1.5px;background:linear-gradient(to bottom,var(--ind),var(--pink),var(--cyan),rgba(34,211,238,.05));border-radius:9px}
+.tl-item{position:relative;margin-bottom:1.8rem}
+.tl-dot{position:absolute;left:-1.87rem;top:.42rem;width:12px;height:12px;border-radius:50%;background:var(--ind);border:2px solid var(--bg);box-shadow:0 0 9px rgba(99,102,241,.55);transition:background .2s,box-shadow .2s}
+.tl-item:hover .tl-dot{background:var(--pink);box-shadow:0 0 13px rgba(236,72,153,.65)}
+.tl-card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:1.3rem 1.6rem;position:relative;overflow:hidden;transition:border-color .25s,box-shadow .25s}
+.tl-inner{position:absolute;inset:0;background:linear-gradient(135deg,rgba(99,102,241,.04),transparent);opacity:0;transition:opacity .25s;pointer-events:none}
+.tl-item:hover .tl-card{border-color:rgba(99,102,241,.35);box-shadow:var(--gi)}
+.tl-item:hover .tl-inner{opacity:1}
+.tl-hdr{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.4rem;margin-bottom:.3rem}
+.tl-role{font-family:var(--fd);font-size:.97rem;font-weight:700;color:#fff}
+.tl-bdg{font-size:.65rem;font-weight:600;padding:.2rem .6rem;border-radius:50px;letter-spacing:.04em;flex-shrink:0}
+.tl-bdg.cur{background:rgba(34,211,238,.1);color:var(--cyan);border:1px solid rgba(34,211,238,.2)}
+.tl-bdg.end{background:rgba(148,163,184,.07);color:var(--mut);border:1px solid var(--bdr)}
+.tl-org{font-size:.82rem;color:var(--ind2);font-weight:500;margin-bottom:.18rem}
+.tl-period{font-size:.73rem;color:var(--mut);margin-bottom:.75rem}
+.tl-list{display:flex;flex-direction:column;gap:.35rem}
+.tl-list li{font-size:.84rem;color:var(--mut);line-height:1.6;padding-left:1rem;position:relative}
+.tl-list li::before{content:'→';position:absolute;left:0;color:var(--ind2);font-size:.74rem;top:.07rem}
+.tl-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.8rem}
+.tl-tag{font-size:.68rem;font-weight:600;padding:.18rem .55rem;border-radius:50px;background:rgba(99,102,241,.09);border:1px solid rgba(99,102,241,.17);color:var(--ind2)}
+
+/* ═══════════════════════════════════════
+   PAGE 4 — PROJECTS
+═══════════════════════════════════════ */
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.3rem}
+.proj-card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:1.7rem;position:relative;overflow:hidden;transition:border-color .3s,transform .3s,box-shadow .3s;cursor:default}
+.proj-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--ind),var(--pink),var(--cyan));opacity:0;transform:translateX(-105%);transition:opacity .4s,transform .4s;pointer-events:none}
+.proj-card:hover::before{opacity:.055;transform:translateX(0)}
+.proj-card:hover{border-color:rgba(99,102,241,.4);transform:translateY(-5px);box-shadow:var(--gi)}
+.proj-card.pv2:hover{border-color:rgba(236,72,153,.35);box-shadow:var(--gp)}
+.proj-card.pv3:hover{border-color:rgba(34,211,238,.28);box-shadow:var(--gc)}
+.proj-card.pv4:hover{border-color:rgba(245,158,11,.25);box-shadow:var(--ga)}
+.pe{font-size:2rem;margin-bottom:.85rem}
+.pt{font-family:var(--fd);font-size:1rem;font-weight:700;color:#fff;margin-bottom:.5rem}
+.pd{font-size:.84rem;color:var(--mut);line-height:1.7;margin-bottom:1rem}
+.p-tags{display:flex;flex-wrap:wrap;gap:.35rem}
+.p-tag{font-size:.69rem;font-weight:600;padding:.18rem .58rem;border-radius:50px;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.19);color:var(--ind2)}
+.p-tag.pk{background:rgba(236,72,153,.08);border-color:rgba(236,72,153,.18);color:var(--pink)}
+.p-tag.cy{background:rgba(34,211,238,.07);border-color:rgba(34,211,238,.16);color:var(--cyan)}
+.p-tag.am{background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.16);color:var(--amb)}
+
+/* ═══════════════════════════════════════
+   PAGE 5 — EDUCATION
+═══════════════════════════════════════ */
+.edu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.2rem;margin-bottom:2.2rem}
+.edu-card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:1.6rem;position:relative;overflow:hidden;transition:border-color .25s,box-shadow .25s}
+.edu-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2.5px;transform:scaleX(0);transition:transform .28s}
+.edu-card.ei::before{background:linear-gradient(90deg,var(--ind),var(--ind2))}
+.edu-card.ec::before{background:linear-gradient(90deg,var(--cyan),var(--ind2))}
+.edu-card:hover{border-color:rgba(99,102,241,.3);box-shadow:var(--gi)}
+.edu-card:hover::before{transform:scaleX(1)}
+.edu-icon{font-size:1.9rem;margin-bottom:1rem}
+.edu-deg{font-family:var(--fd);font-size:.97rem;font-weight:700;color:#fff;margin-bottom:.28rem;line-height:1.3}
+.edu-inst{font-size:.83rem;color:var(--cyan);font-weight:500;margin-bottom:.2rem}
+.edu-yr{font-size:.73rem;color:var(--mut);margin-bottom:.85rem}
+.edu-chips{display:flex;flex-wrap:wrap;gap:.35rem}
+.edu-chip{font-size:.68rem;padding:.16rem .5rem;border-radius:50px;background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.14);color:var(--cyan)}
+
+.cert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:.95rem;margin-bottom:2rem}
+.cert-card{display:flex;align-items:flex-start;gap:.9rem;background:var(--sur);border:1px solid var(--bdr);border-radius:12px;padding:1rem 1.3rem;transition:border-color .22s,box-shadow .22s,transform .22s}
+.cert-card:hover{border-color:rgba(245,158,11,.28);box-shadow:var(--ga);transform:translateY(-3px)}
+.ci-icon{font-size:1.5rem;flex-shrink:0}
+.ci-nm{font-size:.88rem;font-weight:600;color:var(--txt);margin-bottom:.15rem}
+.ci-sub{font-size:.75rem;color:var(--mut)}
+
+.lang-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.95rem}
+.lang-card{background:var(--sur);border:1px solid var(--bdr);border-radius:12px;padding:1.1rem;text-align:center;transition:border-color .22s,box-shadow .22s,transform .22s}
+.lang-card:hover{border-color:rgba(99,102,241,.3);box-shadow:var(--gi);transform:translateY(-3px)}
+.lf{font-size:1.7rem;margin-bottom:.45rem}
+.ln{font-family:var(--fd);font-size:.88rem;font-weight:700;color:#fff;margin-bottom:.18rem}
+.ll{font-size:.7rem;color:var(--mut)}
+.ldots{display:flex;gap:.28rem;justify-content:center;margin-top:.45rem}
+.ldot{width:6px;height:6px;border-radius:50%;background:var(--faint)}
+.ldot.on{background:var(--ind2)}
+
+/* ═══════════════════════════════════════
+   PAGE 6 — CONTACT
+═══════════════════════════════════════ */
+.contact-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:2.5rem;margin-bottom:2rem}
+.contact-left{display:flex;flex-direction:column;align-items:center;text-align:center;gap:1.4rem}
+.cav{width:105px;height:105px;border-radius:50%;background:linear-gradient(135deg,var(--ind),var(--pink));display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:2rem;font-weight:800;color:#fff;position:relative;cursor:none;box-shadow:0 0 25px rgba(99,102,241,.38)}
+.rp{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(99,102,241,.32);animation:rpanim 2.2s ease-out infinite}
+.rp2{animation-delay:.75s;inset:-8px;border-color:rgba(236,72,153,.22)}
+@keyframes rpanim{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.38);opacity:0}}
+.cav-name{font-family:var(--fd);font-weight:700;font-size:.97rem;color:#fff}
+.cav-tag{font-size:.75rem;color:var(--mut)}
+.contact-open{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .85rem;border-radius:50px;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.18);font-size:.72rem;color:var(--cyan);font-weight:500}
+.open-dot{width:5px;height:5px;border-radius:50%;background:var(--cyan);animation:blink 1.3s infinite}
+.contact-bio{font-size:.9rem;line-height:1.75;color:var(--mut);text-align:left}
+.contact-bio .hi{color:var(--txt);font-weight:500}
+
+.cc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.9rem}
+.cc{background:var(--sur);border:1px solid var(--bdr);border-radius:12px;padding:1.1rem 1.3rem;display:flex;align-items:center;gap:.9rem;transition:border-color .22s,box-shadow .22s,transform .2s}
+.cc:hover{border-color:rgba(99,102,241,.38);box-shadow:var(--gi);transform:translateY(-3px)}
+.cc.pk:hover{border-color:rgba(236,72,153,.3);box-shadow:var(--gp)}
+.cc.cy:hover{border-color:rgba(34,211,238,.26);box-shadow:var(--gc)}
+.cc.am:hover{border-color:rgba(245,158,11,.22);box-shadow:var(--ga)}
+.cc-ic{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.cc-ic.i{background:rgba(99,102,241,.12)}
+.cc-ic.p{background:rgba(236,72,153,.1)}
+.cc-ic.c{background:rgba(34,211,238,.09)}
+.cc-ic.a{background:rgba(245,158,11,.08)}
+.cc-lbl{font-size:.68rem;color:var(--mut);font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.16rem}
+.cc-val{font-size:.85rem;color:var(--txt);font-weight:500;word-break:break-all}
+
+.cta-banner{background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(236,72,153,.07),rgba(34,211,238,.05));border:1px solid rgba(99,102,241,.2);border-radius:18px;padding:2rem 2.2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.3rem;position:relative;overflow:hidden}
+.cta-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 50%,rgba(99,102,241,.07),transparent 60%);pointer-events:none}
+.cta-h{font-family:var(--fd);font-size:clamp(1rem,2.2vw,1.4rem);font-weight:800;color:#fff;margin-bottom:.35rem}
+.cta-s{font-size:.86rem;color:var(--mut);max-width:360px;line-height:1.6}
+
+/* ═══════════ RESPONSIVE ═══════════ */
+@media(max-width:960px){
+  .hero-wrap{flex-direction:column;text-align:center;padding:2rem 0}
+  .hero-ctas{justify-content:center}
+  .hero-desc{margin:0 auto 2.4rem}
+  .hcard-wrap{margin:0 auto}
+  .hero-stats{justify-content:center}
+  .about-bio-grid{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .g2{grid-template-columns:1fr}
+  .sk-grid{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  .nav-links,.nav-cta{display:none}
+  .hbg{display:flex}
+  .page{padding:1.5rem 1.3rem 2.5rem}
+  .hcard{width:250px}
+  .tl-hdr{flex-direction:column}
+  .cta-banner{flex-direction:column;padding:1.5rem}
+}
+@media(max-width:480px){
+  .hcard{width:100%;max-width:310px}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+<canvas id="cv"></canvas>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="ld-init">AKM</div>
+  <div class="ld-bar-wrap"><div class="ld-bar"></div></div>
+  <div class="ld-txt">Loading Portfolio</div>
+</div>
+
+<!-- SHELL -->
+<div id="shell">
+
+  <!-- NAVBAR -->
+  <nav id="nav">
+    <div class="nav-logo" onclick="goPage('home')">AKM.</div>
+    <div class="nav-links">
+      <button onclick="goPage('home')" class="active" data-page="home">Home</button>
+      <button onclick="goPage('about')" data-page="about">About</button>
+      <button onclick="goPage('skills')" data-page="skills">Skills</button>
+      <button onclick="goPage('experience')" data-page="experience">Experience</button>
+      <button onclick="goPage('projects')" data-page="projects">Projects</button>
+      <button onclick="goPage('education')" data-page="education">Education</button>
+      <button onclick="goPage('contact')" data-page="contact">Contact</button>
+    </div>
+    <button class="nav-cta" onclick="goPage('contact')">Hire Me ↗</button>
+    <button class="hbg" id="hbg" onclick="toggleMob()"><span></span><span></span><span></span></button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div id="mob">
+    <button onclick="goPage('home');closeMob()" data-page="home">🏠 Home</button>
+    <button onclick="goPage('about');closeMob()" data-page="about">👤 About</button>
+    <button onclick="goPage('skills');closeMob()" data-page="skills">⚡ Skills</button>
+    <button onclick="goPage('experience');closeMob()" data-page="experience">💼 Experience</button>
+    <button onclick="goPage('projects');closeMob()" data-page="projects">🚀 Projects</button>
+    <button onclick="goPage('education');closeMob()" data-page="education">🎓 Education</button>
+    <button onclick="goPage('contact');closeMob()" data-page="contact">📬 Contact</button>
+  </div>
+
+  <!-- PAGE CONTAINER -->
+  <div id="pages">
+
+    <!-- ════════════════════════════
+         PAGE: HOME
+    ════════════════════════════ -->
+    <div class="page active" id="p-home">
+      <div class="hero-wrap">
+        <div class="hero-left">
+          <div class="hero-badge"><span class="hb-dot"></span>&nbsp;Open to Opportunities</div>
+          <h1 class="hero-name">Akash Kumar<br>Mishra</h1>
+          <p class="hero-sub">IT Professional · <span class="ac">Healthcare Tech</span> · Digital Growth</p>
+          <p class="hero-desc">5+ years bridging technology with healthcare — implementing full Hospital Information Systems, driving organic digital growth from zero, and moderating AI content pipelines for Google at scale through Cognizant.</p>
+          <div class="hero-ctas">
+            <button class="btn-p" onclick="goPage('contact')">Get in Touch ↓</button>
+            <button class="btn-s" onclick="goPage('about')">Read More →</button>
+          </div>
+          <div class="hero-stats">
+            <div class="hs"><div class="hs-val">5+</div><div class="hs-lbl">Years Experience</div></div>
+            <div class="hs"><div class="hs-val">3</div><div class="hs-lbl">Hospitals Served</div></div>
+            <div class="hs"><div class="hs-val">80K+</div><div class="hs-lbl">Organic Reach</div></div>
+            <div class="hs"><div class="hs-val">12+</div><div class="hs-lbl">Core Skills</div></div>
+          </div>
+        </div>
+        <div class="hcard-wrap">
+          <div class="hcard">
+            <div class="hc-av">AK</div>
+            <div class="hc-nm">Akash Kumar Mishra</div>
+            <div class="hc-rl">Bhubaneswar, Odisha · B.Tech CSE</div>
+            <div class="hc-div"></div>
+            <div class="hc-stats">
+              <div><div class="hcs-v">5+</div><div class="hcs-l">Years Exp.</div></div>
+              <div><div class="hcs-v">3</div><div class="hcs-l">Hospitals</div></div>
+              <div><div class="hcs-v">80K+</div><div class="hcs-l">Reach</div></div>
+              <div><div class="hcs-v">12+</div><div class="hcs-l">Skills</div></div>
+            </div>
+            <div class="hc-tag"><span class="hct-dot"></span>Available · Bhubaneswar</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════
+         PAGE: ABOUT
+    ════════════════════════════ -->
+    <div class="page" id="p-about">
+      <div class="page-inner">
+        <div class="ph">
+          <div class="ph-label">Who I Am</div>
+          <h2 class="ph-title">About <span class="g">Me</span></h2>
+          <p class="ph-sub">IT professional, healthcare tech specialist, and digital growth strategist with 5+ years of hands-on experience across government and private healthcare institutions.</p>
+        </div>
+
+        <div class="about-bio-grid">
+          <div class="bio-text">
+            <p>I'm <span class="hi">Akash Kumar Mishra</span>, a B.Tech Computer Science &amp; Engineering graduate from <span class="acc">DRIEMS University, Cuttack</span>. My career has been defined by a singular focus — using technology to improve how healthcare is delivered and managed.</p>
+            <p>My journey began at <span class="hi">SCB Medical College &amp; Hospital, Cuttack</span> — one of India's largest government hospitals — where I spent 3.5 years managing web infrastructure, IT assets, HIMS modules, and large-scale hospital events. This foundation built my appreciation for precision, reliability, and the critical nature of healthcare IT.</p>
+            <p>At <span class="hi">UNCE Hospital, Bhubaneswar</span>, I took on my most comprehensive challenge: leading a complete end-to-end hospital digitization project. From Billing and OPD to OT workflows, Aadhaar/ABHA integration, and TPA/BSKY portals — I implemented every module and ensured seamless patient data flow from entry to discharge.</p>
+            <p>My time at <span class="hi">PMSSH, Bhubaneswar</span> showed me the power of digital marketing in healthcare. Starting from zero social presence, I grew organic reach to over <span class="acc">80,000 impressions</span> — without spending a single rupee on ads — through strategic content, SEO, and patient testimonial videos.</p>
+            <p>Today at <span class="hi">Cognizant</span>, I'm part of Google's content moderation ecosystem — working on I2V, Videogen, and Autotrim AI pipelines, ensuring quality and policy compliance at massive scale.</p>
+          </div>
+          <div class="bio-facts">
+            <div class="bf-card"><div class="bf-icon">🎓</div><div><div class="bf-lbl">Education</div><div class="bf-val">B.Tech CSE · DRIEMS University, Cuttack · Graduated Dec 2020</div></div></div>
+            <div class="bf-card"><div class="bf-icon">📍</div><div><div class="bf-lbl">Location</div><div class="bf-val">Bhubaneswar, Odisha, India · Open to remote &amp; hybrid</div></div></div>
+            <div class="bf-card"><div class="bf-icon">🏢</div><div><div class="bf-lbl">Current Role</div><div class="bf-val">Content Moderator at Cognizant · Client: Google · July 2025–Present</div></div></div>
+            <div class="bf-card"><div class="bf-icon">🏥</div><div><div class="bf-lbl">Domain Expertise</div><div class="bf-val">Healthcare IT · HIMS · Digital Marketing · AI Content Operations</div></div></div>
+            <div class="bf-card"><div class="bf-icon">🏅</div><div><div class="bf-lbl">Certifications</div><div class="bf-val">IoT Seminar — IIT Hyderabad · KSHITIJ 2018 — IIT Kharagpur</div></div></div>
+            <div class="bf-card"><div class="bf-icon">🌐</div><div><div class="bf-lbl">LinkedIn</div><div class="bf-val">linkedin.com/in/er-akash-kumar-mishra</div></div></div>
+          </div>
+        </div>
+
+        <div class="div-label" style="margin-bottom:1.3rem">What Drives Me</div>
+        <div class="vals-grid">
+          <div class="val-card"><div class="ve">🏥</div><div class="vn">Healthcare First</div><div class="vd">Every system I've built has patient care at its center — tech only matters if it helps people heal faster.</div></div>
+          <div class="val-card"><div class="ve">🔄</div><div class="vn">Digital Transformation</div><div class="vd">From paper to fully digitized — I turn analogue hospital chaos into seamless, real-time digital systems.</div></div>
+          <div class="val-card"><div class="ve">📊</div><div class="vn">Data-Driven Growth</div><div class="vd">80K+ organic reach with zero ad spend proves that strategy always outperforms budget alone.</div></div>
+          <div class="val-card"><div class="ve">🤝</div><div class="vn">Cross-Team Collaboration</div><div class="vd">Bridging doctors, engineers, and vendors — I deliver complex projects on time through clear communication.</div></div>
+          <div class="val-card"><div class="ve">⚙️</div><div class="vn">Precision &amp; Reliability</div><div class="vd">Hospital IT has zero tolerance for downtime. I've built my career on keeping critical systems stable 24/7.</div></div>
+          <div class="val-card"><div class="ve">🚀</div><div class="vn">Continuous Learning</div><div class="vd">From IoT seminars at IIT Hyderabad to Google's latest AI pipelines — I stay at the cutting edge.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════
+         PAGE: SKILLS
+    ════════════════════════════ -->
+    <div class="page" id="p-skills">
+      <div class="page-inner">
+        <div class="ph">
+          <div class="ph-label">What I Do</div>
+          <h2 class="ph-title">Skills &amp; <span class="g">Expertise</span></h2>
+          <p class="ph-sub">A multi-disciplinary skill set spanning healthcare IT, digital marketing, AI content operations, and full-stack system support.</p>
+        </div>
+
+        <div class="sk-grid" id="sgrid">
+          <div class="sk-item"><div class="sk-hdr"><span class="sk-nm">HIMS / Hospital IT</span><span class="sk-pct">92%</span></div><div class="sk-track"><div class="sk-bar ic" data-w="92"></div></div></div>
+          <div class="sk-item"><div class="sk-hdr"><span class="sk-nm">IT Asset Management</span><span class="sk-pct">88%</span></div><div class="sk-track"><div class="sk-bar ip" data-w="88"></div></div></div>
+          <div class="sk-item"><div class="sk-hdr"><span class="sk-nm">Digital Marketing &amp; SEO</span><span class="sk-pct">86%</span></div><div class="sk-track"><div class="sk-bar cp" data-w="86"></div></div></div>
+          <div class="sk-item"><div class="sk-hdr"><span class="sk-nm">System Troubleshooting</span><span class="sk-pct">91%</span></div><div class="sk-track"><div class="sk-bar ic" data-w="91"></div></div></div>
+          <div class="sk-item"><div class="sk-hdr"><span class="sk-nm">Project Management</span><span class="sk-pct">83%</span></div><div class="sk-track"><div class="sk-bar ap" data-w="83"></div></div></div>
+          <div class="sk-item"><div class="sk-hdr"><span class="sk-nm">Content Moderation</span><span class="sk-pct">89%</span></div><div class="sk-track"><div class="sk-bar ip" data-w="89"></div></div></div>
+          <div class="sk-item"><div class="sk-hdr"><span class="sk-nm">Web Development / CMS</span><span class="sk-pct">79%</span></div><div class="sk-track"><div class="sk-bar cp" data-w="79"></div></div></div>
+          <div class="sk-item"><div class="sk-hdr"><span class="sk-nm">Video Editing &amp; Design</span><span class="sk-pct">77%</span></div><div class="sk-track"><div class="sk-bar ap" data-w="77"></div></div></div>
+          <div class="sk-item"><div class="sk-hdr"><span class="sk-nm">Network &amp; Wi-Fi Support</span><span class="sk-pct">84%</span></div><div class="sk-track"><div class="sk-bar ic" data-w="84"></div></div></div>
+          <div class="sk-item"><div class="sk-hdr"><span class="sk-nm">Vendor &amp; Contract Mgmt</span><span class="sk-pct">80%</span></div><div class="sk-track"><div class="sk-bar ip" data-w="80"></div></div></div>
+        </div>
+
+        <div class="div-label">Skill Categories</div>
+        <div class="sk-cats">
+          <div class="sk-cat">
+            <div class="sk-cat-hd ic2">🏥 Healthcare IT</div>
+            <div class="chips">
+              <span class="chip ci">HIMS / HMS</span><span class="chip ci">EMR</span><span class="chip ci">OPD / IPD</span><span class="chip ci">Billing Module</span><span class="chip ci">OT Digitization</span><span class="chip ci">ABHA / Aadhaar</span><span class="chip ci">TPA / BSKY</span><span class="chip ci">LMS Support</span><span class="chip ci">Pharmacy Mgmt</span><span class="chip ci">Lab Module</span>
+            </div>
+          </div>
+          <div class="sk-cat">
+            <div class="sk-cat-hd pk">📱 Digital Marketing</div>
+            <div class="chips">
+              <span class="chip cp">SEO Optimization</span><span class="chip cp">Google My Business</span><span class="chip cp">Social Media Ads</span><span class="chip cp">Blog Writing</span><span class="chip cp">Facebook / Instagram</span><span class="chip cp">LinkedIn Marketing</span><span class="chip cp">Organic Growth</span><span class="chip cp">Content Calendar</span>
+            </div>
+          </div>
+          <div class="sk-cat">
+            <div class="sk-cat-hd cy">💻 Tech &amp; Infrastructure</div>
+            <div class="chips">
+              <span class="chip cc">Network Monitoring</span><span class="chip cc">Wi-Fi Support</span><span class="chip cc">IT Asset Tracking</span><span class="chip cc">Biometric Systems</span><span class="chip cc">Hardware Support</span><span class="chip cc">IT Procurement</span><span class="chip cc">Security Monitoring</span>
+            </div>
+          </div>
+          <div class="sk-cat">
+            <div class="sk-cat-hd am">🤖 AI / Content Ops</div>
+            <div class="chips">
+              <span class="chip ca">Content Moderation</span><span class="chip ca">I2V Pipeline</span><span class="chip ca">Videogen</span><span class="chip ca">Autotrim</span><span class="chip ca">Policy Compliance</span><span class="chip ca">KPI Accuracy</span><span class="chip ca">Calibration Sessions</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════
+         PAGE: EXPERIENCE
+    ════════════════════════════ -->
+    <div class="page" id="p-experience">
+      <div class="page-inner">
+        <div class="ph">
+          <div class="ph-label">Career Journey</div>
+          <h2 class="ph-title">Professional <span class="g">Experience</span></h2>
+          <p class="ph-sub">5+ years across government hospitals, private healthcare, web development, and AI content operations — always building, always improving.</p>
+        </div>
+
+        <div class="tl">
+
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-card">
+              <div class="tl-inner"></div>
+              <div class="tl-hdr"><div class="tl-role">Content Moderator</div><span class="tl-bdg cur">● Active Now</span></div>
+              <div class="tl-org">Cognizant Technology Solutions · Client: Google</div>
+              <div class="tl-period">July 2025 — Present · Bhubaneswar</div>
+              <ul class="tl-list">
+                <li>Moderate AI-generated content for Google at scale, ensuring platform safety and policy compliance across I2V (Image-to-Video), Videogen, and Autotrim workflows.</li>
+                <li>Analyze complex video and image content to maintain accuracy, quality, and brand alignment standards across multiple content queues.</li>
+                <li>Adapt swiftly to evolving moderation policies and consistently meet organizational KPIs under high-throughput conditions.</li>
+                <li>Participate in quality calibration sessions to refine moderation guidelines and reduce false-positive rates in automated queues.</li>
+                <li>Maintain top-tier productivity metrics while balancing accuracy across concurrent moderation streams.</li>
+              </ul>
+              <div class="tl-tags"><span class="tl-tag">Google</span><span class="tl-tag">Content Moderation</span><span class="tl-tag">I2V</span><span class="tl-tag">Videogen</span><span class="tl-tag">AI Pipelines</span><span class="tl-tag">KPI Metrics</span></div>
+            </div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-card">
+              <div class="tl-inner"></div>
+              <div class="tl-hdr"><div class="tl-role">Sr. Digital Marketing Executive</div><span class="tl-bdg end">Ended</span></div>
+              <div class="tl-org">PMSSH — Pandit Madan Mohan Malviya Hospital, Bhubaneswar</div>
+              <div class="tl-period">June 2025 — October 2025 · Company Operations Ceased</div>
+              <ul class="tl-list">
+                <li>Built the hospital's entire digital presence from scratch across Facebook, Instagram, X, and LinkedIn with zero prior following.</li>
+                <li>Achieved 80,000+ organic impressions with zero paid ad spend through strategic content calendars, patient testimonials, and health-tip videos.</li>
+                <li>Led HIMS implementation, website optimization, SEO improvements, and Google Ads campaign architecture.</li>
+                <li>Handled end-to-end video editing, poster design, and day-to-day system troubleshooting across departments.</li>
+              </ul>
+              <div class="tl-tags"><span class="tl-tag">HIMS</span><span class="tl-tag">SEO</span><span class="tl-tag">80K+ Reach</span><span class="tl-tag">Social Media</span><span class="tl-tag">Video Editing</span></div>
+            </div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-card">
+              <div class="tl-inner"></div>
+              <div class="tl-hdr"><div class="tl-role">IT Executive</div><span class="tl-bdg end">Ended</span></div>
+              <div class="tl-org">UNCE Hospital, Patia, Bhubaneswar</div>
+              <div class="tl-period">August 2024 — January 2025</div>
+              <ul class="tl-list">
+                <li>Implemented a comprehensive HIMS covering Billing, OPD, IPD, EMR, Pharmacy, Lab, Nursing Station, Bed Management, OT, TPA/BSKY, Inventory, SMS, E-Bill, and Aadhaar/ABHA integration.</li>
+                <li>Led full hospital digital transformation from patient entry to discharge — digitized Emergency Room and OT workflows for real-time data flow.</li>
+                <li>Managed IT asset inventory, biometric attendance, vendor negotiations, and IT budget planning.</li>
+                <li>Monitored network traffic for unauthorized access; executed SEO strategies and digital marketing campaigns.</li>
+                <li>Produced patient testimonial videos and social content to support hospital's digital marketing efforts.</li>
+              </ul>
+              <div class="tl-tags"><span class="tl-tag">HIMS Full Suite</span><span class="tl-tag">Digital Transformation</span><span class="tl-tag">OT / EMR / Lab</span><span class="tl-tag">ABHA Integration</span><span class="tl-tag">Network Security</span></div>
+            </div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-card">
+              <div class="tl-inner"></div>
+              <div class="tl-hdr"><div class="tl-role">Application Engineer</div><span class="tl-bdg end">Ended</span></div>
+              <div class="tl-org">Quocent, DLF Cyber City, Patia</div>
+              <div class="tl-period">June 2024 — July 2024</div>
+              <ul class="tl-list">
+                <li>Developed custom client-facing websites tailored to specific business requirements and user flows.</li>
+                <li>Wrote bespoke frontend and backend code to implement required functionality within tight client timelines.</li>
+              </ul>
+              <div class="tl-tags"><span class="tl-tag">Web Development</span><span class="tl-tag">Custom Code</span><span class="tl-tag">Client Projects</span></div>
+            </div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-card">
+              <div class="tl-inner"></div>
+              <div class="tl-hdr"><div class="tl-role">Web Developer cum FMS Engineer</div><span class="tl-bdg end">3.5 Years</span></div>
+              <div class="tl-org">SCB Medical College &amp; Hospital, Cuttack</div>
+              <div class="tl-period">January 2021 — June 2024</div>
+              <ul class="tl-list">
+                <li>Managed IT assets, hardware/software inventory, and procurement documentation for one of Odisha's largest government medical institutions.</li>
+                <li>Maintained and optimized the college website for content accuracy, security compliance, and SEO.</li>
+                <li>Supported digital publication of examination results and internal academic reports.</li>
+                <li>Navigated HIMS modules and provided LMS support for staff and academic training programs.</li>
+                <li>Coordinated IT setup for hospital events, awareness campaigns, and outreach programs.</li>
+                <li>Led project management from planning through execution and post-implementation support.</li>
+              </ul>
+              <div class="tl-tags"><span class="tl-tag">SCB Medical</span><span class="tl-tag">IT Management</span><span class="tl-tag">HIMS</span><span class="tl-tag">LMS</span><span class="tl-tag">Web Dev</span><span class="tl-tag">Events</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════
+         PAGE: PROJECTS
+    ════════════════════════════ -->
+    <div class="page" id="p-projects">
+      <div class="page-inner">
+        <div class="ph">
+          <div class="ph-label">Key Achievements</div>
+          <h2 class="ph-title">Impact &amp; <span class="gp">Projects</span></h2>
+          <p class="ph-sub">Tangible, measurable outcomes across hospital digitization, digital marketing, content operations, and technical infrastructure.</p>
+        </div>
+
+        <div class="proj-grid">
+
+          <div class="proj-card">
+            <div class="pe">🏥</div>
+            <div class="pt">Full Hospital Digital Transformation</div>
+            <div class="pd">Led the complete HIMS rollout at UNCE Hospital — 14+ modules including Billing, OPD/IPD, EMR, Pharmacy, Lab, OT, Nursing Station, Bed Management, TPA/BSKY Portal, SMS Reports, E-Prescriptions, and Aadhaar/ABHA integration. Took the hospital from 100% paper-based to fully digital.</div>
+            <div class="p-tags"><span class="p-tag">HIMS</span><span class="p-tag">EMR</span><span class="p-tag cy">OT Digitization</span><span class="p-tag cy">ABHA</span><span class="p-tag">Pharmacy</span><span class="p-tag">14+ Modules</span></div>
+          </div>
+
+          <div class="proj-card pv2">
+            <div class="pe">📈</div>
+            <div class="pt">80K+ Organic Social Reach — Zero Budget</div>
+            <div class="pd">Built PMSSH's social media presence from absolute zero. Achieved 80,000+ organic impressions across Facebook, Instagram, X, and LinkedIn in just 5 months through content strategy, patient testimonial videos, health tips, and targeted SEO — spending nothing on paid ads.</div>
+            <div class="p-tags"><span class="p-tag pk">Social Media</span><span class="p-tag pk">SEO</span><span class="p-tag pk">Organic Growth</span><span class="p-tag pk">Zero Ad Spend</span><span class="p-tag pk">80K+</span></div>
+          </div>
+
+          <div class="proj-card pv3">
+            <div class="pe">🤖</div>
+            <div class="pt">AI Content Moderation at Scale · Google</div>
+            <div class="pd">Moderating Google's AI-generated content pipelines through Cognizant — specializing in I2V (Image-to-Video), Videogen, and Autotrim workflows. Consistently maintaining top-tier accuracy and KPIs while participating in policy calibration sessions to improve AI safety outcomes.</div>
+            <div class="p-tags"><span class="p-tag cy">AI Moderation</span><span class="p-tag cy">I2V</span><span class="p-tag cy">Videogen</span><span class="p-tag cy">Google</span><span class="p-tag cy">Autotrim</span></div>
+          </div>
+
+          <div class="proj-card pv4">
+            <div class="pe">🌐</div>
+            <div class="pt">SCB Medical College Web Platform</div>
+            <div class="pd">Managed and optimized the web infrastructure of SCB Medical College & Hospital, Cuttack for 3.5 years — one of India's largest government hospitals. Handled SEO, security, content accuracy, examination result publications, and academic compliance across the digital platform.</div>
+            <div class="p-tags"><span class="p-tag am">Web Dev</span><span class="p-tag am">SEO</span><span class="p-tag am">Govt. Hospital</span><span class="p-tag am">3.5 Yrs</span></div>
+          </div>
+
+          <div class="proj-card">
+            <div class="pe">🔒</div>
+            <div class="pt">Hospital Network Security &amp; Infrastructure</div>
+            <div class="pd">Set up and monitored hospital-wide network infrastructure — detecting and blocking unauthorized access attempts, maintaining Wi-Fi stability across clinical departments, and ensuring 24/7 uptime for critical patient management and billing systems.</div>
+            <div class="p-tags"><span class="p-tag">Network Security</span><span class="p-tag">Wi-Fi</span><span class="p-tag">IT Infrastructure</span><span class="p-tag">24/7 Uptime</span></div>
+          </div>
+
+          <div class="proj-card pv2">
+            <div class="pe">📋</div>
+            <div class="pt">IT Asset &amp; Vendor Management Systems</div>
+            <div class="pd">Designed and managed complete IT asset management systems across multiple hospital departments — tracking hardware/software inventories, coordinating procurement cycles, negotiating competitive vendor contracts, and maintaining financial accountability within tight healthcare budgets.</div>
+            <div class="p-tags"><span class="p-tag pk">Asset Mgmt</span><span class="p-tag pk">Procurement</span><span class="p-tag pk">Vendor Negotiation</span><span class="p-tag pk">Budgeting</span></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════
+         PAGE: EDUCATION
+    ════════════════════════════ -->
+    <div class="page" id="p-education">
+      <div class="page-inner">
+        <div class="ph">
+          <div class="ph-label">Academic Background</div>
+          <h2 class="ph-title">Education &amp; <span class="gc">Credentials</span></h2>
+          <p class="ph-sub">Computer Science foundation, IIT-level seminar participation, and multilingual communication across Odia, Hindi, and English.</p>
+        </div>
+
+        <div class="div-label">Degrees</div>
+        <div class="edu-grid">
+          <div class="edu-card ei">
+            <div class="edu-icon">🎓</div>
+            <div class="edu-deg">Bachelor of Technology<br>Computer Science &amp; Engineering</div>
+            <div class="edu-inst">DRIEMS University · Tangi, Cuttack</div>
+            <div class="edu-yr">Graduated December 2020</div>
+            <div class="edu-chips">
+              <span class="edu-chip">Data Structures</span><span class="edu-chip">DBMS</span><span class="edu-chip">Operating Systems</span><span class="edu-chip">Computer Networks</span><span class="edu-chip">Software Engineering</span>
+            </div>
+          </div>
+          <div class="edu-card ec">
+            <div class="edu-icon">📚</div>
+            <div class="edu-deg">Intermediate in Science<br>(10+2)</div>
+            <div class="edu-inst">Vinayak College of Science &amp; Commerce · Bhadrak</div>
+            <div class="edu-yr">March 2016</div>
+            <div class="edu-chips">
+              <span class="edu-chip">Physics</span><span class="edu-chip">Chemistry</span><span class="edu-chip">Mathematics</span><span class="edu-chip">Internet &amp; Technology</span><span class="edu-chip">Alternative English</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="div-label">Certifications &amp; Seminars</div>
+        <div class="cert-grid">
+          <div class="cert-card">
+            <div class="ci-icon">🏅</div>
+            <div>
+              <div class="ci-nm">National Seminar on Internet of Things</div>
+              <div class="ci-sub">IIT Hyderabad · National-level presentation &amp; participation</div>
+            </div>
+          </div>
+          <div class="cert-card">
+            <div class="ci-icon">⚙️</div>
+            <div>
+              <div class="ci-nm">KSHITIJ 2018 — Techno Management Fest</div>
+              <div class="ci-sub">IIT Kharagpur · Annual technical-managerial conclave</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="div-label">Languages</div>
+        <div class="lang-grid">
+          <div class="lang-card">
+            <div class="lf">🇮🇳</div>
+            <div class="ln">Odia</div>
+            <div class="ll">Native Speaker</div>
+            <div class="ldots"><span class="ldot on"></span><span class="ldot on"></span><span class="ldot on"></span><span class="ldot on"></span><span class="ldot on"></span></div>
+          </div>
+          <div class="lang-card">
+            <div class="lf">🇮🇳</div>
+            <div class="ln">Hindi</div>
+            <div class="ll">Fluent</div>
+            <div class="ldots"><span class="ldot on"></span><span class="ldot on"></span><span class="ldot on"></span><span class="ldot on"></span><span class="ldot"></span></div>
+          </div>
+          <div class="lang-card">
+            <div class="lf">🇬🇧</div>
+            <div class="ln">English</div>
+            <div class="ll">Professional</div>
+            <div class="ldots"><span class="ldot on"></span><span class="ldot on"></span><span class="ldot on"></span><span class="ldot on"></span><span class="ldot"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════
+         PAGE: CONTACT
+    ════════════════════════════ -->
+    <div class="page" id="p-contact">
+      <div class="page-inner">
+        <div class="ph">
+          <div class="ph-label">Let's Connect</div>
+          <h2 class="ph-title">Get in <span class="g">Touch</span></h2>
+          <p class="ph-sub">Available for full-time roles, contract work, freelance projects, and healthcare IT consulting.</p>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-left">
+            <div class="cav">
+              AK
+              <div class="rp"></div>
+              <div class="rp rp2"></div>
+            </div>
+            <div>
+              <div class="cav-name">Akash Kumar Mishra</div>
+              <div class="cav-tag">Bhubaneswar, Odisha</div>
+            </div>
+            <div class="contact-open"><span class="open-dot"></span>&nbsp;Open to Work</div>
+            <div class="contact-bio">
+              Whether you have a <span class="hi">healthcare IT project</span>, need a <span class="hi">digital marketing strategy</span>, or are looking for someone who understands both clinical and technical hospital operations — I'd love to hear from you.
+            </div>
+          </div>
+          <div>
+            <div class="cc-grid">
+              <a href="https://www.linkedin.com/in/er-akash-kumar-mishra" target="_blank" class="cc">
+                <div class="cc-ic i">💼</div>
+                <div><div class="cc-lbl">LinkedIn</div><div class="cc-val">er-akash-kumar-mishra</div></div>
+              </a>
+              <div class="cc cy">
+                <div class="cc-ic c">📍</div>
+                <div><div class="cc-lbl">Location</div><div class="cc-val">Bhubaneswar, Odisha, India</div></div>
+              </div>
+              <div class="cc pk">
+                <div class="cc-ic p">🏢</div>
+                <div><div class="cc-lbl">Currently At</div><div class="cc-val">Cognizant · Google Client</div></div>
+              </div>
+              <div class="cc am">
+                <div class="cc-ic a">🎓</div>
+                <div><div class="cc-lbl">Education</div><div class="cc-val">B.Tech CSE · DRIEMS</div></div>
+              </div>
+              <div class="cc">
+                <div class="cc-ic i">🏥</div>
+                <div><div class="cc-lbl">Domain</div><div class="cc-val">Healthcare IT · Digital Marketing</div></div>
+              </div>
+              <div class="cc cy">
+                <div class="cc-ic c">⏱</div>
+                <div><div class="cc-lbl">Experience</div><div class="cc-val">5+ Years · 3 Hospitals Served</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cta-banner">
+          <div>
+            <div class="cta-h">Ready to work together?</div>
+            <div class="cta-s">I'm open to full-time opportunities, contract work, and consulting in healthcare IT, digital transformation, or AI content operations.</div>
+          </div>
+          <a href="https://www.linkedin.com/in/er-akash-kumar-mishra" target="_blank" class="btn-p">Connect on LinkedIn ↗</a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /pages -->
+</div><!-- /shell -->
+
+<script>
+/* ══ LOADER ══ */
+window.addEventListener('load',()=>{setTimeout(()=>document.getElementById('loader').classList.add('out'),2000)});
+
+/* ══ CURSOR ══ */
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function lr(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(lr)})();
+function setCursorHover(on){
+  ring.style.width=on?'46px':'30px';ring.style.height=on?'46px':'30px';
+  ring.style.borderColor=on?'rgba(236,72,153,.7)':'rgba(129,140,248,.7)';
+  cur.style.background=on?'var(--pink)':'var(--cyan)';
+  cur.style.boxShadow=on?'0 0 10px var(--pink),0 0 20px var(--pink)':'0 0 10px var(--cyan),0 0 20px var(--cyan)';
+}
+document.addEventListener('mouseover',e=>{if(e.target.closest('a,button,.proj-card,.tl-card,.bf-card,.val-card,.cc,.cert-card,.lang-card,.edu-card,.sk-cat,.chip'))setCursorHover(true)});
+document.addEventListener('mouseout',e=>{if(e.target.closest('a,button,.proj-card,.tl-card,.bf-card,.val-card,.cc,.cert-card,.lang-card,.edu-card,.sk-cat,.chip'))setCursorHover(false)});
+
+/* ══ PARTICLE CANVAS ══ */
+(function(){
+  const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+  const C=['99,102,241','236,72,153','34,211,238','245,158,11'];
+  let W,H,pts=[];
+  function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight}
+  class Pt{
+    constructor(){this.reset(true)}
+    reset(i){this.x=Math.random()*W;this.y=i?Math.random()*H:0;this.vx=(Math.random()-.5)*.36;this.vy=(Math.random()-.5)*.36;this.r=Math.random()*1.6+.5;this.c=C[Math.floor(Math.random()*4)];this.a=Math.random()*.4+.12}
+    step(){this.x+=this.vx;this.y+=this.vy;if(this.x<-10||this.x>W+10||this.y<-10||this.y>H+10)this.reset(false)}
+    draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=`rgba(${this.c},${this.a})`;ctx.fill()}
+  }
+  function init(){resize();const n=Math.min(100,Math.floor(W*H/9800));pts=Array.from({length:n},()=>new Pt())}
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{p.step();p.draw()});
+    for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+      const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<125){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(99,102,241,${(1-d/125)*.09})`;ctx.lineWidth=.75;ctx.stroke()}
+    }
+    requestAnimationFrame(frame);
+  }
+  window.addEventListener('resize',init,{passive:true});
+  init();frame();
+})();
+
+/* ══ PAGE SYSTEM ══ */
+const pages=['home','about','skills','experience','projects','education','contact'];
+let current='home',prev=null;
+
+function goPage(id){
+  if(id===current)return;
+  const oldEl=document.getElementById('p-'+current);
+  const newEl=document.getElementById('p-'+id);
+  // exit old
+  oldEl.classList.remove('active');
+  oldEl.classList.add('exit');
+  setTimeout(()=>{oldEl.classList.remove('exit')},420);
+  // enter new
+  newEl.classList.add('active');
+  // scroll new page to top
+  newEl.scrollTop=0;
+  // update active button
+  document.querySelectorAll('[data-page]').forEach(b=>{
+    b.classList.toggle('active',b.dataset.page===id);
+  });
+  prev=current;
+  current=id;
+  // fire skill bars if skills page
+  if(id==='skills') triggerSkillBars();
+}
+
+function triggerSkillBars(){
+  setTimeout(()=>{
+    document.querySelectorAll('#p-skills .sk-bar[data-w]').forEach(b=>{b.style.width=b.dataset.w+'%'});
+  },120);
+}
+
+/* ══ MOBILE MENU ══ */
+function toggleMob(){
+  const m=document.getElementById('mob'),h=document.getElementById('hbg');
+  m.classList.toggle('open');h.classList.toggle('open');
+}
+function closeMob(){
+  document.getElementById('mob').classList.remove('open');
+  document.getElementById('hbg').classList.remove('open');
+}
+</script>
+</body>
+</html>
